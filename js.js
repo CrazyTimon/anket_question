@@ -45,7 +45,8 @@ var dump = [
 
 $(function() {
     var question = $('.question'),
-        answer = $('.answer');
+        answer = $('.answer'),
+        answers = $('.answers');
     
     question.html(dump[0].q);
     answer.eq(0).html(dump[0].a[0].lable);
@@ -58,21 +59,28 @@ $(function() {
             next = $(el).data('next');
         if(!(/http:/.test(next))){
             e.preventDefault();
-            question.html(dump[next].q);
+
+            answers.stop().fadeOut(250);
+            question.stop().fadeOut(250, function(){
+                question.html(dump[next].q);
+                
+                $('.answers').html('');
+                if(dump[next].a){
+                    $.each(dump[next].a, function(key, ans){
+                        var appenedAnswer = $('<a>', {
+                            class:'answer',
+                            href: ans.next
+                        });
             
-            $('.answers').html('');
-            if(dump[next].a){
-                $.each(dump[next].a, function(key, ans){
-                    var appenedAnswer = $('<a>', {
-                        class:'answer',
-                        href: ans.next
+                        appenedAnswer.html(ans.lable);
+                        appenedAnswer.data('next', ans.next);
+                        $('.answers').append(appenedAnswer);
                     });
-        
-                    appenedAnswer.html(ans.lable);
-                    appenedAnswer.data('next', ans.next);
-                    $('.answers').append(appenedAnswer);
-                });
-            }
+                }
+                question.stop().fadeIn(250);
+                answers.stop().fadeIn(250);
+            });
+
         }
     })
 });
