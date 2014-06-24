@@ -13,12 +13,12 @@ var dump = [
     {//1
         q: 'Он приводит вам новых клиентов',
         a: [{
-                label: 'Да, достаточно',
-                nex: 2
+                lable: 'Да, достаточно',
+                next: 2
             },
             {
-                label: 'Нет (или хотелось бы больше)',
-                nex: 3
+                lable: 'Нет (или хотелось бы больше)',
+                next: 3
             }]
     },
     {//2
@@ -29,15 +29,15 @@ var dump = [
     {//3
         q: 'По каким рекламным каналам приходят клиенты на ваш сайт?',
         a: [{
-                label: 'Из поиска Яндекс',
+                lable: 'Из поиска Яндекс',
                 next: 'http://ya.ru'
             },
             {
-                label: 'Контекстная реклама',
+                lable: 'Контекстная реклама',
                 next: 'http://google.com'
             },
             {
-                label: 'Незнаю (или вообще не приходят)',
+                lable: 'Незнаю (или вообще не приходят)',
                 next: 'http://rambler.ru'
             }]
     }
@@ -47,7 +47,32 @@ $(function() {
     var question = $('.question'),
         answer = $('.answer');
     
-    $('.question').html(dump[0].q);
-    $('.answer:eq(0)').html(dump[0].a[0].lable);
-    $('.answer:eq(1)').html(dump[0].a[1].lable);
+    question.html(dump[0].q);
+    answer.eq(0).html(dump[0].a[0].lable);
+    answer.eq(0).data('next', dump[0].a[0].next);
+    answer.eq(1).html(dump[0].a[1].lable);
+    answer.eq(1).data('next', dump[0].a[1].next);
+    
+    $('body').on('click', '.answer',  function(e){
+        var el = e.currentTarget;
+            next = $(el).data('next');
+        if(!(/http:/.test(next))){
+            e.preventDefault();
+            question.html(dump[next].q);
+            
+            $('.answers').html('');
+            if(dump[next].a){
+                $.each(dump[next].a, function(key, ans){
+                    var appenedAnswer = $('<a>', {
+                        class:'answer',
+                        href: ans.next
+                    });
+        
+                    appenedAnswer.html(ans.lable);
+                    appenedAnswer.data('next', ans.next);
+                    $('.answers').append(appenedAnswer);
+                });
+            }
+        }
+    })
 });
