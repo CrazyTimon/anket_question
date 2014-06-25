@@ -43,10 +43,10 @@ var dump = [
     }
 ];
 
-$(function() {
-    var question = $('.question'),
-        answer = $('.answer'),
-        answers = $('.answers');
+jQuery(function() {
+    var question = jQuery('.question'),
+        answer = jQuery('.answer'),
+        answers = jQuery('.answers');
     
     question.html(dump[0].q);
     answer.eq(0).html(dump[0].a[0].lable);
@@ -54,9 +54,9 @@ $(function() {
     answer.eq(1).html(dump[0].a[1].lable);
     answer.eq(1).data('next', dump[0].a[1].next);
     
-    $('body').on('click', '.answer',  function(e){
+    jQuery('body').on('click', '.answer',  function(e){
         var el = e.currentTarget;
-            next = $(el).data('next');
+            next = jQuery(el).data('next');
         if(!(/http:/.test(next))){
             e.preventDefault();
 
@@ -64,17 +64,17 @@ $(function() {
             question.stop().fadeOut(250, function(){
                 question.html(dump[next].q);
                 
-                $('.answers').html('');
+                jQuery('.answers').html('');
                 if(dump[next].a){
-                    $.each(dump[next].a, function(key, ans){
-                        var appenedAnswer = $('<a>', {
+                    jQuery.each(dump[next].a, function(key, ans){
+                        var appenedAnswer = jQuery('<a>', {
                             class:'answer',
                             href: ans.next
                         });
             
                         appenedAnswer.html(ans.lable);
                         appenedAnswer.data('next', ans.next);
-                        $('.answers').append(appenedAnswer);
+                        jQuery('.answers').append(appenedAnswer);
                     });
                 }
                 question.stop().fadeIn(250);
